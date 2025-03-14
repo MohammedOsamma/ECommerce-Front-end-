@@ -1,7 +1,10 @@
 import CommonForm from "@/components/comman/form";
 import { loginFormControls } from "@/config";
+import { loginUser } from "@/store/auth-slice";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const initialState = {
   email: "",
@@ -9,7 +12,18 @@ const initialState = {
 };
 const AuthLogin = () => {
   const [formData, setFormData] = useState(initialState);
-  function onSubmit() {}
+  const dispatch = useDispatch();
+
+  function onSubmit(e) {
+    e.preventDefault();
+    dispatch(loginUser(formData)).then((data) => {
+      if (data.payload.success) {
+        toast.success("Login successfully");
+      } else {
+        toast.error("Invalid email or password");
+      }
+    });
+  }
   return (
     <div className="mx-auto w-full max-w-md space-y-6">
       <div className="text-center">

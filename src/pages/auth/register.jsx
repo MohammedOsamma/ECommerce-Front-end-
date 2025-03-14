@@ -21,6 +21,8 @@ const AuthRegister = () => {
       if (data?.payload?.success) {
         toast.success("Account created successfully");
         navigate("/auth/login");
+      } else {
+        toast.error("User Already Exists with this email! Please Try again.");
       }
     });
   }
