@@ -11,15 +11,27 @@ import ShoppingLayout from "./components/shopping-view/layout";
 import NotFound from "./pages/not-found";
 import ShoppingCheckout from "./pages/shopping-view/checkout";
 import ShoppingAccount from "./pages/shopping-view/account";
-import shoppingListing from "./pages/shopping-view/listing";
+import ShoppingListing from "./pages/shopping-view/listing";
 import ShoppingHome from "./pages/shopping-view/home";
 import CheckAuth from "./components/comman/auth-check";
 import UnauthPage from "./pages/unauth-page";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { checkAuth } from "./store/auth-slice";
 
 function App() {
-  const { isAuthenticated, user } = useSelector((state) => state.auth);
+  const { isAuthenticated, user, isLoading } = useSelector(
+    (state) => state.auth
+  );
+  const dispatch = useDispatch();
 
+  useEffect(() => {
+    dispatch(checkAuth());
+  }, [dispatch]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
   return (
     <div className="flex flex-col overflow-hidden bg-white ">
       <Routes>
@@ -56,7 +68,7 @@ function App() {
           }
         >
           <Route path="home" element={<ShoppingHome />} />
-          <Route path="listing" element={<shoppingListing />} />
+          <Route path="listing" element={<ShoppingListing />} />
           <Route path="account" element={<ShoppingAccount />} />
           <Route path="checkout" element={<ShoppingCheckout />} />
         </Route>
