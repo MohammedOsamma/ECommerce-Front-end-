@@ -4,13 +4,16 @@ import { Input } from "../ui/input";
 import { FileIcon, Ghost, UploadCloudIcon, XIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import axios from "axios";
+import { Skeleton } from "../ui/skeleton";
 
 const ProductImageUpload = ({
   imageFile,
   setImageFile,
   uploadedImageUrl,
+  imageLoadinState,
   setUploadedImageUrl,
   setImageLoadingState,
+  isEditMode,
 }) => {
   const inputRef = useRef(null);
 
@@ -44,7 +47,9 @@ const ProductImageUpload = ({
       "http://localhost:5000/api/admin/products/upload-image",
       data
     );
-    if (response?.data?.success) {
+    console.log(response);
+
+    if (response.data.success) {
       setUploadedImageUrl(response.data.result.url);
       setImageLoadingState(false);
     }
@@ -60,7 +65,9 @@ const ProductImageUpload = ({
       <div
         onDragOver={handleDragOver}
         onDrop={handleDrop}
-        className="border-2 border-dashed rounded-lg "
+        className={`${
+          isEditMode ? "opacity-70" : ""
+        } border-2 border-dashed rounded-lg`}
       >
         <Input
           id="image-upload"
@@ -68,15 +75,20 @@ const ProductImageUpload = ({
           className="hidden"
           ref={inputRef}
           onChange={handleImageFileChange}
+          disabled={isEditMode}
         />
         {!imageFile ? (
           <Label
             htmlFor="image-upload"
-            className="flex flex-col items-center justify-center h-32 cursor-pointer"
+            className={`${
+              isEditMode ? "cursor-no-drop" : "cursor-pointer"
+            } flex flex-col items-center justify-center h-32 `}
           >
             <UploadCloudIcon className="w-10 h-10 text-muted-foreground mb-2" />
             <span>Drag and Drop or click to upload image</span>
           </Label>
+        ) : imageLoadinState ? (
+          <Skeleton className="h-10 bg-gray-100" />
         ) : (
           <div className="flex items-center justify-between m-2 ">
             <div className="flex items-center">
