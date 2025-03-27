@@ -13,7 +13,7 @@ import {
   deleteProdut,
   editProduct,
   fetchAllProducts,
-} from "@/store/products-slice";
+} from "@/store/admin/products-slice";
 import React, { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
