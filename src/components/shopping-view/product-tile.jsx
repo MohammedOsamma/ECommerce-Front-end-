@@ -6,13 +6,13 @@ import { brandOptionsMap, categoryOptionsMap } from "@/config";
 
 const ShoppingProductTile = ({ product }) => {
   return (
-    <Card className="w-full max-w-sm mx-auto">
+    <Card className="w-full max-w-sm mx-auto py-0">
       <div>
         <div className="relative ">
           <img
             src={product?.image}
             alt={product?.title}
-            className="w-full h-[300px] object-cover rounded-2xl px-2"
+            className="w-full h-[300px] object-cover rounded-t-xl  "
           />
           {product.salePrice > 0 ? (
             <Badge className="absolute top-2 left-2 bg-red-500 hover:bg-red-600">
@@ -45,7 +45,7 @@ const ShoppingProductTile = ({ product }) => {
             ) : null}
           </div>
         </CardContent>
-        <CardFooter>
+        <CardFooter className="mb-2">
           <Button className="w-full">Add To Cart</Button>
         </CardFooter>
       </div>
