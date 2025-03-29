@@ -1,4 +1,5 @@
 import ProductFilter from "@/components/shopping-view/filter";
+import ProductDetailsDialog from "@/components/shopping-view/product-details";
 import ShoppingProductTile from "@/components/shopping-view/product-tile";
 import { Button } from "@/components/ui/button";
 import {
@@ -26,6 +27,11 @@ const ShoppingListing = () => {
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [openDetailDialog, setOpenDetailDialog] = useState();
+
+  useEffect(() => {
+    if (productDetails !== null) setOpenDetailDialog(true);
+  }, [productDetails]);
 
   function createSearchParamsHelper(filterParams) {
     const queryParams = [];
@@ -135,6 +141,11 @@ const ShoppingListing = () => {
             : null}
         </div>
       </div>
+      <ProductDetailsDialog
+        open={openDetailDialog}
+        setOpen={setOpenDetailDialog}
+        productDetails={productDetails}
+      />
     </div>
   );
 };
