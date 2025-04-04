@@ -62,47 +62,47 @@ const shoppingCartSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCasee(addToCart.pending, (state) => {
+      .addCase(addToCart.pending, (state) => {
         state.isLoading = true;
       })
-      .addCasee(addToCart.fulfilled, (state, action) => {
+      .addCase(addToCart.fulfilled, (state, action) => {
         state.isLoading = false;
         state.cartItems = action.payload.data;
       })
-      .addCasee(addToCart.rejected, (state) => {
+      .addCase(addToCart.rejected, (state) => {
         state.isLoading = false;
         state.cartItems = [];
       })
-      .addCasee(fetchCartItems.pending, (state) => {
+      .addCase(fetchCartItems.pending, (state) => {
         state.isLoading = true;
       })
-      .addCasee(fetchCartItems.fulfilled, (state, action) => {
+      .addCase(fetchCartItems.fulfilled, (state, action) => {
         state.isLoading = false;
         state.cartItems = action.payload.data;
       })
-      .addCasee(fetchCartItems.rejected, (state) => {
+      .addCase(fetchCartItems.rejected, (state) => {
         state.isLoading = false;
         state.cartItems = [];
       })
-      .addCasee(updateCartQuantity.pending, (state) => {
+      .addCase(updateCartQuantity.pending, (state) => {
         state.isLoading = true;
       })
-      .addCasee(updateCartQuantity.fulfilled, (state, action) => {
+      .addCase(updateCartQuantity.fulfilled, (state, action) => {
         state.isLoading = false;
         state.cartItems = action.payload.data;
       })
-      .addCasee(updateCartQuantity.rejected, (state) => {
+      .addCase(updateCartQuantity.rejected, (state) => {
         state.isLoading = false;
         state.cartItems = [];
       })
-      .addCasee(deleteCartItem.pending, (state) => {
+      .addCase(deleteCartItem.pending, (state) => {
         state.isLoading = true;
       })
-      .addCasee(deleteCartItem.fulfilled, (state, action) => {
+      .addCase(deleteCartItem.fulfilled, (state, action) => {
         state.isLoading = false;
         state.cartItems = action.payload.data;
       })
-      .addCasee(deleteCartItem.rejected, (state) => {
+      .addCase(deleteCartItem.rejected, (state) => {
         state.isLoading = false;
         state.cartItems = [];
       });
