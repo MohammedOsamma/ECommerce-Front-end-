@@ -1,4 +1,4 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const initialState = {
@@ -60,5 +60,53 @@ const shoppingCartSlice = createSlice({
   name: "shoppingCart",
   initialState,
   reducers: {},
-  extraReducers: (builder) => {},
+  extraReducers: (builder) => {
+    builder
+      .addCasee(addToCart.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCasee(addToCart.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.cartItems = action.payload.data;
+      })
+      .addCasee(addToCart.rejected, (state) => {
+        state.isLoading = false;
+        state.cartItems = [];
+      })
+      .addCasee(fetchCartItems.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCasee(fetchCartItems.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.cartItems = action.payload.data;
+      })
+      .addCasee(fetchCartItems.rejected, (state) => {
+        state.isLoading = false;
+        state.cartItems = [];
+      })
+      .addCasee(updateCartQuantity.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCasee(updateCartQuantity.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.cartItems = action.payload.data;
+      })
+      .addCasee(updateCartQuantity.rejected, (state) => {
+        state.isLoading = false;
+        state.cartItems = [];
+      })
+      .addCasee(deleteCartItem.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCasee(deleteCartItem.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.cartItems = action.payload.data;
+      })
+      .addCasee(deleteCartItem.rejected, (state) => {
+        state.isLoading = false;
+        state.cartItems = [];
+      });
+  },
 });
+
+export default shoppingCartSlice.reducer;
