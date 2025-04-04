@@ -4,7 +4,11 @@ import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { brandOptionsMap, categoryOptionsMap } from "@/config";
 
-const ShoppingProductTile = ({ product, handleGetProductDetails }) => {
+const ShoppingProductTile = ({
+  product,
+  handleGetProductDetails,
+  handleAddToCart,
+}) => {
   return (
     <Card className="w-full max-w-sm mx-auto py-0">
       <div onClick={() => handleGetProductDetails(product?._id)}>
@@ -45,10 +49,12 @@ const ShoppingProductTile = ({ product, handleGetProductDetails }) => {
             ) : null}
           </div>
         </CardContent>
-        <CardFooter className="mb-2">
-          <Button className="w-full">Add To Cart</Button>
-        </CardFooter>
       </div>
+      <CardFooter className="mb-2">
+        <Button onClick={() => handleAddToCart(product._id)} className="w-full">
+          Add To Cart
+        </Button>
+      </CardFooter>
     </Card>
   );
 };
