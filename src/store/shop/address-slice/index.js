@@ -6,7 +6,7 @@ const initialState = {
   addressList: [],
 };
 
-export const addAddress = createAsyncThunk(
+export const addNewAddress = createAsyncThunk(
   "/addresses/addNewAddress",
   async (formData) => {
     const response = await axios.post(
@@ -57,16 +57,14 @@ const addressSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(addAddress.pending, (state) => {
+      .addCase(addNewAddress.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(addAddress.fulfilled, (state, action) => {
+      .addCase(addNewAddress.fulfilled, (state) => {
         state.isLoading = false;
-        state.addressList = action.payload.data;
       })
-      .addCase(addAddress.rejected, (state) => {
+      .addCase(addNewAddress.rejected, (state) => {
         state.isLoading = false;
-        state.addressList = [];
       })
       .addCase(fetchAllAddress.pending, (state) => {
         state.isLoading = true;
