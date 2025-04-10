@@ -7,6 +7,7 @@ const initialState = {
   isLoading: false,
 };
 
+//add function to add new order
 export const createNewOrder = createAsyncThunk(
   "/order/createOrder",
   async (orderData) => {
