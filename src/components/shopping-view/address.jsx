@@ -19,7 +19,7 @@ const initialAddressFormData = {
   pincode: "",
   notes: "",
 };
-const Address = () => {
+const Address = ({ setCurrentSelectedAddress }) => {
   const [formData, setFormData] = useState(initialAddressFormData);
   const [currentEditedId, setCurrentEditedId] = useState(null);
   const { user } = useSelector((state) => state.auth);
@@ -108,6 +108,7 @@ const Address = () => {
             addressInfo={singleAddressItem}
             handleDeleteAdress={handleDeleteAdress}
             handleEditAdress={handleEditAdress}
+            setCurrentSelectedAddress={setCurrentSelectedAddress}
           />
         ))}
       </div>
