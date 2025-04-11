@@ -11,24 +11,37 @@ const ShoppingCheckout = () => {
 
   function handleInitiatePaypalPayment() {
     const orderData = {
-      userId: user._id,
-      cartItems: cartItems.items.map((item) => ({
-        productId: item.productId,
-        title: item.title,
-        image: item.image,
-        price: item.salePrice > 0 ? item.salePrice : item.price,
-        quantity: item.quantity,
+      userId: user?.id,
+      cartId: cartItems?._id,
+      cartItems: cartItems.items.map((singleCartItem) => ({
+        productId: singleCartItem?.productId,
+        title: singleCartItem?.title,
+        image: singleCartItem?.image,
+        price:
+          singleCartItem?.salePrice > 0
+            ? singleCartItem?.salePrice
+            : singleCartItem?.price,
+        quantity: singleCartItem?.quantity,
       })),
-      addressInfo,
-      orderStatus: "Pending",
-      paymentMethod: "Paypal",
-      paymentStatus: "Pending",
+      addressInfo: {
+        addressId: currentSelectedAddress?._id,
+        address: currentSelectedAddress?.address,
+        city: currentSelectedAddress?.city,
+        pincode: currentSelectedAddress?.pincode,
+        phone: currentSelectedAddress?.phone,
+        notes: currentSelectedAddress?.notes,
+      },
+      orderStatus: "pending",
+      paymentMethod: "paypal",
+      paymentStatus: "pending",
       totalAmount: totalCartAmount,
       orderDate: new Date(),
       orderUpdateDate: new Date(),
       paymentId: "",
       payerId: "",
     };
+
+    console.log(orderData);
   }
 
   const totalCartAmount =

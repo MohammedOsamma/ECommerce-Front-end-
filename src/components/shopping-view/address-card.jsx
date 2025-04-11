@@ -13,7 +13,7 @@ const AddressCard = ({
     <Card
       onClick={
         setCurrentSelectedAddress
-          ? () => setCurrentSelectedAddress(addressInfo?._id)
+          ? () => setCurrentSelectedAddress(addressInfo)
           : null
       }
     >
