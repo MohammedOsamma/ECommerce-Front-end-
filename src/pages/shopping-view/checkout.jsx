@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import image from "../../assets/banner-1.webp";
 import Address from "@/components/shopping-view/address";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import UserCartItemContent from "@/components/shopping-view/cart-items-content";
 import { Button } from "@/components/ui/button";
+import { createNewOrder } from "@/store/shop/order-slice";
 const ShoppingCheckout = () => {
   const { cartItems } = useSelector((state) => state.shopCart);
   const { user } = useSelector((state) => state.auth);
+  const [isPaymentStart, setIsPaymentStart] = useState(false);
   const [currentSelectedAddress, setCurrentSelectedAddress] = useState(null);
+  const dispatch = useDispatch();
 
   function handleInitiatePaypalPayment() {
     const orderData = {
@@ -24,12 +27,18 @@ const ShoppingCheckout = () => {
         quantity: singleCartItem?.quantity,
       })),
       addressInfo: {
-        addressId: currentSelectedAddress?._id,
-        address: currentSelectedAddress?.address,
-        city: currentSelectedAddress?.city,
-        pincode: currentSelectedAddress?.pincode,
-        phone: currentSelectedAddress?.phone,
-        notes: currentSelectedAddress?.notes,
+        // addressId: currentSelectedAddress?._id,
+        // address: currentSelectedAddress?.address,
+        // city: currentSelectedAddress?.city,
+        // pincode: currentSelectedAddress?.pincode,
+        // phone: currentSelectedAddress?.phone,
+        // notes: currentSelectedAddress?.notes,
+        addressId: "123456",
+        address: "123 Main St",
+        city: "New York",
+        pincode: "10001",
+        phone: "1234567890",
+        notes: "Leave at the front door",
       },
       orderStatus: "pending",
       paymentMethod: "paypal",
@@ -41,7 +50,16 @@ const ShoppingCheckout = () => {
       payerId: "",
     };
 
-    console.log(orderData);
+    dispatch(createNewOrder(orderData)).then((data) => {
+      if (data.payload.success) {
+        setIsPaymentStart(true);
+      } else {
+        setIsPaymentStart(false);
+      }
+      if (data.payload.approvalURL) {
+        window.location.href = data.payload.approvalURL;
+      }
+    });
   }
 
   const totalCartAmount =
@@ -56,6 +74,7 @@ const ShoppingCheckout = () => {
           0
         )
       : 0;
+
   return (
     <div className="flex flex-col">
       <div className="relative w-full h-[300px] overflow-hidden">
