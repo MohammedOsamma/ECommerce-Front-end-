@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import UserCartItemContent from "@/components/shopping-view/cart-items-content";
 import { Button } from "@/components/ui/button";
 import { createNewOrder } from "@/store/shop/order-slice";
+import { toast } from "sonner";
 const ShoppingCheckout = () => {
   const { cartItems } = useSelector((state) => state.shopCart);
   const { user } = useSelector((state) => state.auth);
@@ -13,6 +14,15 @@ const ShoppingCheckout = () => {
   const dispatch = useDispatch();
 
   function handleInitiatePaypalPayment() {
+    if (cartItems.length === 0) {
+      toast.error("Please add items to cart before checkout");
+      return;
+    }
+
+    if (currentSelectedAddress === null) {
+      toast.error("Please select an address before checkout");
+      return;
+    }
     const orderData = {
       userId: user?.id,
       cartId: cartItems?._id,
@@ -27,18 +37,12 @@ const ShoppingCheckout = () => {
         quantity: singleCartItem?.quantity,
       })),
       addressInfo: {
-        // addressId: currentSelectedAddress?._id,
-        // address: currentSelectedAddress?.address,
-        // city: currentSelectedAddress?.city,
-        // pincode: currentSelectedAddress?.pincode,
-        // phone: currentSelectedAddress?.phone,
-        // notes: currentSelectedAddress?.notes,
-        addressId: "123456",
-        address: "123 Main St",
-        city: "New York",
-        pincode: "10001",
-        phone: "1234567890",
-        notes: "Leave at the front door",
+        addressId: currentSelectedAddress?._id,
+        address: currentSelectedAddress?.address,
+        city: currentSelectedAddress?.city,
+        pincode: currentSelectedAddress?.pincode,
+        phone: currentSelectedAddress?.phone,
+        notes: currentSelectedAddress?.notes,
       },
       orderStatus: "pending",
       paymentMethod: "paypal",
@@ -85,7 +89,10 @@ const ShoppingCheckout = () => {
         />
       </div>
       <div className="grid justify-items-center grid-cols-1 sm:grid-cols-2 gap-4 mt-5 p-5">
-        <Address setCurrentSelectedAddress={setCurrentSelectedAddress} />
+        <Address
+          setCurrentSelectedAddress={setCurrentSelectedAddress}
+          selectedId={currentSelectedAddress}
+        />
         <div className="flex flex-col gap-4 w-2xl">
           {cartItems && cartItems.items && cartItems.items.length > 0
             ? cartItems.items.map((item) => (

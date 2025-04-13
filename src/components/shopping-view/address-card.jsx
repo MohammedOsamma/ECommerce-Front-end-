@@ -8,6 +8,7 @@ const AddressCard = ({
   handleDeleteAdress,
   handleEditAdress,
   setCurrentSelectedAddress,
+  selectedId,
 }) => {
   return (
     <Card
@@ -16,6 +17,11 @@ const AddressCard = ({
           ? () => setCurrentSelectedAddress(addressInfo)
           : null
       }
+      className={`cursor-pointer border-red-700 ${
+        selectedId?._id === addressInfo?._id
+          ? "border-red-900 border-[4px]"
+          : "border-black"
+      }`}
     >
       <CardContent className="grid gap-4">
         <Label>Address : {addressInfo?.address}</Label>
