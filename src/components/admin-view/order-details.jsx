@@ -2,9 +2,14 @@ import React, { useState } from "react";
 import { DialogContent, DialogTitle } from "../ui/dialog";
 import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Badge } from "../ui/badge";
 import CommonForm from "../comman/form";
+import {
+  getAllOrderForAdmin,
+  getOrderDetailsForAdmin,
+  updateOrderStatus,
+} from "@/store/admin/order-slice";
 
 const initialFormData = {
   status: "",
@@ -12,8 +17,21 @@ const initialFormData = {
 const AdminOrderDetailsView = ({ orderDetails }) => {
   const [formData, setFormData] = useState(initialFormData);
   const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
   function handleUpdateStatus(e) {
     e.preventDefault();
+    const { status } = formData;
+    console.log(formData);
+
+    dispatch(
+      updateOrderStatus({ id: orderDetails?._id, orderStatus: status })
+    ).then((data) => {
+      if (data?.payload?.success) {
+        dispatch(getOrderDetailsForAdmin(orderDetails?._id));
+        dispatch(getAllOrderForAdmin());
+        setFormData(initialFormData);
+      }
+    });
   }
   return (
     <DialogContent className="sm:max-w-[600px]">

@@ -30,8 +30,8 @@ export const updateOrderStatus = createAsyncThunk(
   "/order/updateOrderStatus",
   async ({ id, orderStatus }) => {
     const response = await axios.put(
-      `http://localhost:5000/api/admin/orders/details/${id}`,
-      orderStatus
+      `http://localhost:5000/api/admin/orders/update/${id}`,
+      { orderStatus }
     );
     return response.data;
   }
