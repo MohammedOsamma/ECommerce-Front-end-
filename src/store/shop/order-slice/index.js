@@ -55,7 +55,11 @@ export const getOrderDetails = createAsyncThunk(
 const shoppingOrderSlice = createSlice({
   name: "shoopingOrderSlice",
   initialState,
-  reducers: {},
+  reducers: {
+    resetOrderDetails: (state, actoin) => {
+      state.orderDetails = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(createNewOrder.pending, (state) => {
@@ -82,7 +86,7 @@ const shoppingOrderSlice = createSlice({
         state.isLoading = false;
         state.ordersList = action.payload.data;
       })
-      .addCase(getAllOrderByUser.pending, (state) => {
+      .addCase(getAllOrderByUser.rejected, (state) => {
         state.isLoading = false;
         state.ordersList = [];
       })
@@ -93,11 +97,12 @@ const shoppingOrderSlice = createSlice({
         state.isLoading = false;
         state.orderDetails = action.payload.data;
       })
-      .addCase(getOrderDetails.pending, (state) => {
+      .addCase(getOrderDetails.rejected, (state) => {
         state.isLoading = false;
         state.orderDetails = null;
       });
   },
 });
 
+export const { resetOrderDetails } = shoppingOrderSlice.actions;
 export default shoppingOrderSlice.reducer;
