@@ -10,6 +10,7 @@ import {
   getOrderDetailsForAdmin,
   updateOrderStatus,
 } from "@/store/admin/order-slice";
+import { toast } from "sonner";
 
 const initialFormData = {
   status: "",
@@ -23,6 +24,8 @@ const AdminOrderDetailsView = ({ orderDetails }) => {
     const { status } = formData;
     console.log(formData);
 
+    console.log(orderDetails);
+
     dispatch(
       updateOrderStatus({ id: orderDetails?._id, orderStatus: status })
     ).then((data) => {
@@ -30,6 +33,7 @@ const AdminOrderDetailsView = ({ orderDetails }) => {
         dispatch(getOrderDetailsForAdmin(orderDetails?._id));
         dispatch(getAllOrderForAdmin());
         setFormData(initialFormData);
+        toast.success(data?.payload?.message);
       }
     });
   }
