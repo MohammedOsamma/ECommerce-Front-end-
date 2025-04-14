@@ -63,4 +63,5 @@ const adminOrderSlice = createSlice({
   },
 });
 
+export const { resetOrderDetails } = adminOrderSlice.actions;
 export default adminOrderSlice.reducer;

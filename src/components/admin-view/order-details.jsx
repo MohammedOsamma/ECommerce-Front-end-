@@ -7,7 +7,7 @@ import CommonForm from "../comman/form";
 const initialFormData = {
   status: "",
 };
-const AdminOrderDetailsView = () => {
+const AdminOrderDetailsView = ({ orderDetails }) => {
   const [formData, setFormData] = useState(initialFormData);
   function handleUpdateStatus(e) {
     e.preventDefault();
