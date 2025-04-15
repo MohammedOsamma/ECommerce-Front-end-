@@ -6,25 +6,52 @@ import { toast } from "sonner";
 
 function UserCartItemContent({ cartItem }) {
   const { user } = useSelector((state) => state.auth);
+  const { cartItems } = useSelector((state) => state.shopCart);
+  const { productList } = useSelector((state) => state.shopProducts);
   const dispatch = useDispatch();
 
   function handleUpdateQuantity(getCartItem, typeOfAction) {
-    let updatedQuantity = 0;
-    if (typeOfAction === "plus") {
-      updatedQuantity = getCartItem.quantity + 1;
+    if (typeOfAction == "plus") {
+      let getCartItems = cartItems.items || [];
+
+      if (getCartItems.length) {
+        const indexOfCurrentCartItem = getCartItems.findIndex(
+          (item) => item.productId === getCartItem?.productId
+        );
+
+        const getCurrentProductIndex = productList.findIndex(
+          (product) => product._id === getCartItem?.productId
+        );
+        const getTotalStock = productList[getCurrentProductIndex].totalStock;
+
+        if (indexOfCurrentCartItem > -1) {
+          const getQuantity = getCartItems[indexOfCurrentCartItem].quantity;
+          if (getQuantity + 1 > getTotalStock) {
+            toast.error(
+              `Only ${getQuantity} quantity can be added for this item`
+            );
+
+            return;
+          }
+        }
+      }
     }
-    if (typeOfAction === "minus") {
-      updatedQuantity = getCartItem.quantity - 1;
-    }
+
     dispatch(
       updateCartQuantity({
         userId: user?.id,
-        productId: getCartItem.productId,
-        quantity: updatedQuantity,
+        productId: getCartItem?.productId,
+        quantity:
+          typeOfAction === "plus"
+            ? getCartItem?.quantity + 1
+            : getCartItem?.quantity - 1,
       })
-    );
+    ).then((data) => {
+      if (data?.payload?.success) {
+        toast.success("Cart item is updated successfully");
+      }
+    });
   }
-
   function handleDeleteCartItem(getCartItem) {
     dispatch(
       deleteCartItem({ userId: user.id, productId: getCartItem.productId })
