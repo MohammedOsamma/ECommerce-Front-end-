@@ -1,5 +1,8 @@
+import ProductDetailsDialog from "@/components/shopping-view/product-details";
 import ShoppingProductTile from "@/components/shopping-view/product-tile";
 import { Input } from "@/components/ui/input";
+import { addToCart, fetchCartItems } from "@/store/shop/cart-slice";
+import { fetchProductDetails } from "@/store/shop/products-slice";
 import {
   getSearchResults,
   resetSearchResults,
@@ -7,12 +10,22 @@ import {
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
+import { toast } from "sonner";
 
 const SearchProducts = () => {
-  const [keyword, setKeyword] = useState("");
-  const [searchParams, setSearchParams] = useSearchParams("");
   const dispatch = useDispatch();
+  const [keyword, setKeyword] = useState("");
+  const [openDetailDialog, setOpenDetailDialog] = useState(false);
+
+  const [searchParams, setSearchParams] = useSearchParams("");
+  const { user } = useSelector((state) => state.auth);
+  const { cartItems } = useSelector((state) => state.shopCart);
   const { searchResults } = useSelector((state) => state.shopSearch);
+  const { productDetails } = useSelector((state) => state.shopProducts);
+  useEffect(() => {
+    if (productDetails !== null) setOpenDetailDialog(true);
+  }, [productDetails]);
+
   useEffect(() => {
     if (keyword && keyword.trim() !== "" && keyword.length > 3) {
       setTimeout(() => {
@@ -26,7 +39,41 @@ const SearchProducts = () => {
     }
   }, [keyword]);
 
-  console.log(searchResults);
+  function handleAddToCart(getCurrentProductId, getTotalStock) {
+    let getCartItems = cartItems.items || [];
+
+    if (getCartItems.length) {
+      const indexOfCurrentItem = getCartItems.findIndex(
+        (item) => item.productId === getCurrentProductId
+      );
+      if (indexOfCurrentItem > -1) {
+        const getQuantity = getCartItems[indexOfCurrentItem].quantity;
+        if (getQuantity + 1 > getTotalStock) {
+          toast.success(
+            `Only ${getQuantity} quantity can be added for this item`
+          );
+          return;
+        }
+      }
+    }
+
+    dispatch(
+      addToCart({
+        userId: user?.id,
+        productId: getCurrentProductId,
+        quantity: 1,
+      })
+    ).then((data) => {
+      if (data?.payload?.success) {
+        dispatch(fetchCartItems(user?.id));
+        toast.success("Product added to cart successfully");
+      }
+    });
+  }
+
+  function handleGetProductDetails(getCurrentProductId) {
+    dispatch(fetchProductDetails(getCurrentProductId));
+  }
 
   return (
     <div className="container mx-auto md:px-6 px-4 py-8">
@@ -46,9 +93,18 @@ const SearchProducts = () => {
       ) : null}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
         {searchResults.map((item) => (
-          <ShoppingProductTile product={item} />
+          <ShoppingProductTile
+            product={item}
+            handleAddToCart={handleAddToCart}
+            handleGetProductDetails={handleGetProductDetails}
+          />
         ))}
       </div>
+      <ProductDetailsDialog
+        open={openDetailDialog}
+        setOpen={setOpenDetailDialog}
+        productDetails={productDetails}
+      />
     </div>
   );
 };
