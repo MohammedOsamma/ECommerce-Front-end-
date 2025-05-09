@@ -18,7 +18,7 @@ export const getReviews = createAsyncThunk("order/getReviews", async (id) => {
   return result?.data;
 });
 
-createSlice({
+const reviewSlice = createSlice({
   name: "reviewSlice",
   initialState,
   reducers: {},
@@ -27,13 +27,15 @@ createSlice({
       .addCase(getReviews.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getReviews.pending, (state, action) => {
+      .addCase(getReviews.fulfilled, (state, action) => {
         state.isLoading = false;
         state.reviews = action.payload.data;
       })
-      .addCase(getReviews.pending, (state, action) => {
+      .addCase(getReviews.rejected, (state, action) => {
         state.isLoading = false;
         state.reviews = [];
       });
   },
 });
+
+export default reviewSlice.reducer;
