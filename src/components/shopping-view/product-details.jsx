@@ -37,6 +37,8 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
       })
     ).then((data) => {
       if (data?.payload?.success) {
+        setReviewMsg("");
+        setRating(0);
         dispatch(getReviews(productDetails._id));
         toast.success("Review added successfully");
       }
