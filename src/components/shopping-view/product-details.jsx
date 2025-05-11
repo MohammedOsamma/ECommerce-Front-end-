@@ -9,6 +9,8 @@ import { addToCart, fetchCartItems } from "@/store/shop/cart-slice";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 import { setProductDetails } from "@/store/shop/products-slice";
+import { Label } from "../ui/label";
+import StarRatingComponent from "../comman/star-rating";
 
 const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
   const { user } = useSelector((state) => state.auth);
@@ -185,7 +187,11 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
                 </div>
               </div>
             </div>
-            <div className="mt-5  flex gap-2 ">
+            <div className="mt-10  flex flex-col gap-2 ">
+              <Label>Write a Review</Label>
+              <div className="flex">
+                <StarRatingComponent />
+              </div>
               <Input
                 className=" focus-visible:ring-[0px]"
                 placeholder="Write a Review ..."
