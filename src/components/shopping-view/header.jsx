@@ -89,7 +89,7 @@ function HeaderRightContent() {
         >
           <ShoppingCart className="h-6 w-6 " />
           <span className="absolute top-[-5px] right-[2px] font-bold text-sm">
-            {cartItems?.items.length}
+            {cartItems?.items?.length || 0}
           </span>
           <span className="sr-only">User Cart</span>
         </Button>
